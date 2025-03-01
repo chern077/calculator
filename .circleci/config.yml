@@ -1,17 +1,25 @@
 version: 2.1
+
 jobs:
   build:
+    working_directory: ~/circleci-python
     docker:
-      - image: circleci/python:3.9
+      - image: "circleci/python:3.6.4"
     steps:
       - checkout
-      - run:
-          name: Install Dependencies
-          command: pip install -r requirements.txt
-      - run:
-          name: Run Tests
-          command: pytest tests/
+      - run: python3 main.py
+  test:
+    working_directory: ~/circleci-python
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      - run: python3 main-test.py
+
 workflows:
-  build-and-test:
+  build_and_test:
     jobs:
       - build
+      - test:
+          requires:
+            - build
